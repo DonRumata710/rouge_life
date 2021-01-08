@@ -7,4 +7,5 @@ using UnityEngine;
 public class Armor : Equipment
 {
 	public int armor = 1;
+	public string objectName;
 }

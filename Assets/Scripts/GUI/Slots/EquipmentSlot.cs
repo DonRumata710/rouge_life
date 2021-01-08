@@ -32,8 +32,7 @@ namespace inventory_gui
                     if (equipment != null)
                     {
                         slot.item = equipment;
-
-                        if (slot.item != null)
+                        if (slot.item)
                         {
                             newItem.transform.SetParent(transform);
                             transform.GetChild(0).gameObject.SetActive(false);

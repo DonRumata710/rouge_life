@@ -29,7 +29,7 @@ public class Motor : MonoBehaviour
 		}
 
 		float speed_percent = agent.velocity.magnitude / agent.speed;
-		anim.SetFloat ("speed_percent", speed_percent, smooth_time, Time.deltaTime);
+		anim.SetFloat ("speed percent", speed_percent, smooth_time, Time.deltaTime);
 	}
 	
 	public void MoveToPoint(Vector3 point)
@@ -75,7 +75,7 @@ public class Motor : MonoBehaviour
         if (!enabled || agent.pathPending)
             return false;
 
-		return agent.remainingDistance <= agent.stoppingDistance + 0.001f;
+		return agent.remainingDistance <= agent.stoppingDistance + float.Epsilon;
 	}
 
     public void OnDisable()
