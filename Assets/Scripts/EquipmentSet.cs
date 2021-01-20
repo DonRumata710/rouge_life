@@ -34,10 +34,12 @@ public class EquipmentSet : MonoBehaviour
             param.right_hand_damage = weapon.damage;
         }
 
-        Armor armor = leftHand.item as Armor;
+        Shield shield = leftHand.item as Shield;
         weapon = leftHand.item as Weapon;
-        if (armor)
-            param.armor += armor.armor;
+        if (shield)
+        {
+            param.armor += shield.armor;
+        }
         else if (weapon)
         {
             weapon = leftHand.item as Weapon;
@@ -46,7 +48,7 @@ public class EquipmentSet : MonoBehaviour
             param.left_hand_damage = weapon.damage;
         }
 
-        armor = helmet.item as Armor;
+        Armor armor = helmet.item as Armor;
         if (armor)
             param.armor += armor.armor;
         armor = platebody.item as Armor;

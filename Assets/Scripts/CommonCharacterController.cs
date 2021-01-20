@@ -31,11 +31,6 @@ public class CommonCharacterController : MonoBehaviour
         private set;
     }
 
-    public EquipmentSet equipment {
-        private set;
-        get;
-    }
-
     public Inventory inventory {
         private set;
         get;
@@ -110,11 +105,9 @@ public class CommonCharacterController : MonoBehaviour
         anim = GetComponent<Animator>();
         Parameters = new Stats(CharacterManager.instance.GetParameters(characterType));
 
-        equipment = GetComponent<EquipmentSet>();
         inventory = GetComponent<Inventory>();
 
         Parameters.OnDeath += Death;
-        equipment.CalcEquipment();
     }
 
     protected virtual void Update()
@@ -206,22 +199,26 @@ public class CommonCharacterController : MonoBehaviour
     protected virtual void ReactOnEnemyDeath() { }
 
 
-    float right_hand_attack_timeout = 0.0f;
-    float left_hand_attack_timeout = 0.0f;
+    protected float right_hand_attack_timeout = 0.0f;
+    protected float left_hand_attack_timeout = 0.0f;
 
 
     void Attack()
     {
         if (OnAttack != null)
             OnAttack(Target);
+        ProvideAttack();
+    }
 
+    protected virtual void ProvideAttack()
+    {
         if (right_hand_attack_timeout <= 0.0f)
         {
             anim.SetTrigger("attack");
             Target.MakeDamage(Parameters.RightHandDamage, this);
             right_hand_attack_timeout = 1.0f / Parameters.RightHandFrequency;
         }
-        if (left_hand_attack_timeout <= 0.0f && equipment.rightHand.item is Weapon)
+        if (left_hand_attack_timeout <= 0.0f)
         {
             anim.SetTrigger("left hand attack");
             Target.MakeDamage(Parameters.LeftHandDamage, this);

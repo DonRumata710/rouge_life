@@ -22,7 +22,7 @@ namespace inventory_gui
         Text armor;
         Text damage;
 
-        CommonCharacterController player;
+		HumanoidController player;
 
 
 		public CommonCharacterController.SimpleEvent OnInventoryChanging;
