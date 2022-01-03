@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EquipmentSlot
+public class EquipmentSlot : ScriptableObject
 {
 	private Equipment equipment;
     private uint type;
