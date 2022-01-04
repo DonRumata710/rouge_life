@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b6c93e4e5f22de4c9c53ddba2f7ffd3, type: 3}
+  m_Name: SamuraiParameters
+  m_EditorClassIdentifier: 
+  character_name: soldier
+  max_health: 12
+  armor: 0
+  right_hand_damage: 1
+  right_hand_attack_frequency: 1
+  right_hand_action_distance: 2
+  left_hand_damage: 0
+  left_hand_attack_frequency: 1
+  left_hand_action_distance: 2

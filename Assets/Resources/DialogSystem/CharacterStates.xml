@@ -1,0 +1,76 @@
+<characters>
+	<expressions>
+		<expression name="endOfDialog" value="150" />
+		<expression name="attack" value="9000" />
+	</expressions>
+	<classes>
+		<soldier state="soldierNeutral" />
+		<goblin state="enemy" />
+	</classes>
+	<states>
+		<soldierNeutral aggressive="false" scene="firstMeeting" />
+		<familiarSoldier aggressive="false" scene="commonGreeting" />
+		<enemy aggressive="true">
+			<location>
+				<area point="RobberPoint" distance="10" />
+			</location>
+		</enemy>
+	</states>
+	<scenes>
+		<firstMeeting words="1">
+			<answer words="11">
+				<set variable="info" value="village" />
+				<talk words="110" state="familiarSoldier" >
+					<answer words="$endOfDialog" />
+					<goto scene="commonGreeting" />
+				</talk>
+			</answer>
+			<answer words="12">
+				<set variable="info" value="robbers" />
+				<talk words="120" state="familiarSoldier">
+					<answer words="121">
+						<talk words="1210">
+							<answer words="$endOfDialog" />
+							<goto scene="commonGreeting" />
+						</talk>
+					</answer>
+				</talk>
+			</answer>
+			<answer words="13">
+				<attack words="130"/>
+			</answer>
+		</firstMeeting>
+		<commonGreeting words="2">
+			<answer words="21">
+				<check variable="info" value="robbers" operation="contain" />
+				<talk words="210">
+					<answer words="$endOfDialog" />
+					<goto scene="commonGreeting" />
+				</talk>
+			</answer>
+			<answer words="22">
+				<check variable="info" value="village" operation="contain" />
+				<talk words="220">
+					<answer words="$endOfDialog" />
+					<goto scene="commonGreeting" />
+				</talk>
+			</answer>
+			<answer words="23">
+				<check variable="info" value="village" operation="not-contain" />
+				<set variable="info" value="|village" />
+				<talk words="230">
+					<answer words="$endOfDialog" />
+					<goto scene="commonGreeting" />
+				</talk>
+			</answer>
+			<answer words="24">
+				<check variable="info" value="robbers" operation="not-contain" />
+				<set variable="info" value="|robbers" />
+				<talk words="240">
+					<answer words="$endOfDialog" />
+					<goto scene="commonGreeting" />
+				</talk>
+			</answer>
+		</commonGreeting>
+	</scenes>
+</characters>

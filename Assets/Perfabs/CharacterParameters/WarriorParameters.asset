@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b6c93e4e5f22de4c9c53ddba2f7ffd3, type: 3}
+  m_Name: WarriorParameters
+  m_EditorClassIdentifier: 
+  character_name: warrior
+  max_health: 12
+  base_damage: 2
+  base_armor: 1
+  base_attack_timeout: 1
+  base_action_distance: 3
