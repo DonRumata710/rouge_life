@@ -123,12 +123,10 @@ public class CommonCharacterController : MonoBehaviour
                 switch (action)
                 {
                     case Action.ATTACK:
-                        if (Target != null)
-                            Attack();
+                        Attack();
                         break;
                     case Action.CAST:
-                        if (Target != null)
-                            Cast();
+                        Cast();
                         break;
                     case Action.TALK:
                         Talk();
