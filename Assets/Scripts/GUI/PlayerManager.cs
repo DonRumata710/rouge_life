@@ -360,4 +360,10 @@ public class PlayerManager : MonoBehaviour
 		isPaused = !isPaused;
 		PauseManager.instance.ChangeState (isPaused);
 	}
+
+    public void PinCamera()
+    {
+        CameraFollow cf = camera.GetComponent<CameraFollow>();
+        cf.SwitchTarget();
+    }
 }
