@@ -6,16 +6,12 @@ public class CameraFollow : MonoBehaviour
 {
 	public Transform target;
 	public float smoothing = 5f;
+	List<GameObject> players;
 
 	void Start ()
 	{
-		GameObject player = GameObject.FindGameObjectWithTag ("Player");
-        PlayerController controller = player.GetComponent<PlayerController>();
-        controller.SetCamera (GetComponent<Camera> ());
-        controller.OnDeath += ResetTarget;
-
-        target = player.transform;
-		transform.position = new Vector3 (target.position.x, target.position.y + 30.0f, target.position.z + 30.0f);
+		players = new List<GameObject> (GameObject.FindGameObjectsWithTag ("Player"));
+		setTarget(players[0]);
 	}
 
 	void FixedUpdate ()
@@ -26,6 +22,22 @@ public class CameraFollow : MonoBehaviour
 
     public void ResetTarget()
     {
+		players.Remove(target.gameObject);
         target = null;
+		if (players.Count == 0)
+			players = new List<GameObject>(GameObject.FindGameObjectsWithTag("Player"));
+		if (players.Count > 0)
+			setTarget(players[0]);
     }
+
+	void setTarget(GameObject player)
+    {
+		CommonCharacterController controller = player.GetComponent<CommonCharacterController>();
+		controller.OnDeath += ResetTarget;
+		PlayerManager playerManager = player.GetComponent<PlayerManager>();
+		playerManager.SetCamera(GetComponent<Camera>());
+
+		target = player.transform;
+		transform.position = new Vector3(target.position.x, target.position.y + 30.0f, target.position.z + 30.0f);
+	}
 }
