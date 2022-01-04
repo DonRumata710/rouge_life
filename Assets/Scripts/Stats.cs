@@ -91,6 +91,21 @@ public class Stats
         }
     }
 
+    public float Speed
+    {
+        get
+        {
+            return dynamic_params.speed;
+        }
+    }
+
+    public float CroachModificator
+    {
+        get
+        {
+            return dynamic_params.croach_modificator;
+        }
+    }
 
     public CharacterParametersSet EquipmentParameters
     {

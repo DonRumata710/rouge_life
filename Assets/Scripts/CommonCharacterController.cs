@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[RequireComponent(typeof(EquipmentSet))]
 [RequireComponent(typeof(Motor))]
 public class CommonCharacterController : MonoBehaviour
 {
@@ -23,6 +22,14 @@ public class CommonCharacterController : MonoBehaviour
     public event SimpleEvent OnDeath;
 
     public string characterType;
+
+
+    bool isCrouch = false;
+
+    bool IsCrouch()
+    {
+        return isCrouch;
+    }
 
 
     public Stats Parameters
@@ -175,9 +182,7 @@ public class CommonCharacterController : MonoBehaviour
 
             targetObject = value.gameObject;
             if (action == Action.ATTACK)
-            {
                 Target.OnDeath += ResetTarget;
-            }
         }
     }
 
@@ -189,7 +194,6 @@ public class CommonCharacterController : MonoBehaviour
 
     public void SetTarget(GameObject obj)
     {
-        targetObject = obj;
         Target = obj.GetComponent<CommonCharacterController>();
     }
 
@@ -202,6 +206,26 @@ public class CommonCharacterController : MonoBehaviour
     protected virtual void ReactOnEnemyDeath()
     {
         anim.SetTrigger("from agressive");
+    }
+
+    public void ToggleCrouch()
+    {
+        SetCrouch(!isCrouch);
+    }
+
+    public void SetCrouch(bool state)
+    {
+        isCrouch = state;
+        if (state)
+        {
+            anim.SetTrigger("to crouch");
+            Motor.Speed = Parameters.Speed;
+        }
+        else
+        {
+            anim.SetTrigger("from crouch");
+            Motor.Speed = Parameters.Speed * Parameters.CroachModificator;
+        }
     }
 
 

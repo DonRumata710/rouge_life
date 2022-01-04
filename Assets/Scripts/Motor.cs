@@ -31,7 +31,18 @@ public class Motor : MonoBehaviour
 		float speed_percent = agent.velocity.magnitude / agent.speed;
 		anim.SetFloat ("speed percent", speed_percent, smooth_time, Time.deltaTime);
 	}
-	
+
+	void setSpeed(float speed)
+    {
+        agent.speed = speed;
+    }
+
+    public float Speed
+    {
+        get { return agent.speed; }
+        set { agent.speed = value; }
+    }
+
 	public void MoveToPoint(Vector3 point)
     {
         if (!enabled)

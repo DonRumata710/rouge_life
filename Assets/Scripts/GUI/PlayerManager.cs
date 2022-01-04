@@ -128,9 +128,7 @@ public class PlayerManager : MonoBehaviour
             }
 
             if (spell == null)
-            {
                 continue;
-            }
 
             GameObject spell_button = Instantiate(spellButton, magicPanel.transform);
 
@@ -348,6 +346,11 @@ public class PlayerManager : MonoBehaviour
         Debug.Log("Dialog stopped");
 
         Pause();
+    }
+
+    public void Crouch()
+    {
+        player.ToggleCrouch();
     }
 
     public void OpenMenu ()

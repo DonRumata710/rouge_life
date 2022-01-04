@@ -12,31 +12,44 @@ public class CharacterParametersSet : ScriptableObject
     public const string DAMAGE = "damage";
     public const string ATTACK_FREQUENCY = "attack frequency";
     public const string ATTACK_DISTANCE = "action distance";
+    public const string SPEED = "speed";
+    public const string CROUCH_MODIFICATOR = "crouch modificator";
+    public const string OTHER = "other";
 
 
     public class EffectsSet : Dictionary<string, List<Effect>>
     {
         public EffectsSet()
         {
-            this[HEALTH] = new List<Effect>();
-            this[MAX_HEALTH] = new List<Effect>();
-            this[ARMOR] = new List<Effect>();
-            this[DAMAGE] = new List<Effect>();
-            this[ATTACK_FREQUENCY] = new List<Effect>();
-            this[ATTACK_DISTANCE] = new List<Effect>();
+            Add(HEALTH, new List<Effect>());
+            Add(MAX_HEALTH, new List<Effect>());
+            Add(ARMOR, new List<Effect>());
+            Add(DAMAGE, new List<Effect>());
+            Add(ATTACK_FREQUENCY, new List<Effect>());
+            Add(ATTACK_DISTANCE, new List<Effect>());
+            Add(SPEED, new List<Effect>());
+            Add(CROUCH_MODIFICATOR, new List<Effect>());
+            Add(OTHER, new List<Effect>());
         }
 
         public void ApplyEffects(Effect[] new_effects)
         {
             foreach (Effect effect in new_effects)
             {
-                this[effect.parameter].Add(effect);
+                ApplyEffect(effect);
             }
         }
 
         public void ApplyEffect(Effect effect)
         {
-            this[effect.parameter].Add(effect);
+            try
+            {
+                this[effect.parameter].Add(effect);
+            }
+            catch (KeyNotFoundException)
+            {
+                this[OTHER].Add(effect);
+            }
         }
     }
 
@@ -54,6 +67,9 @@ public class CharacterParametersSet : ScriptableObject
     public int left_hand_damage = 0;
     public float left_hand_attack_frequency = 1.0f;
     public float left_hand_action_distance = 2.0f;
+
+    public float speed = 4.0f;
+    public float croach_modificator = 0.5f;
 
 
     public void UseEffects(EffectsSet effects)
