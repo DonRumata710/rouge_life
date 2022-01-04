@@ -53,7 +53,7 @@ namespace inventory_gui
 		{
 			PauseManager.instance.Pause ();
 
-			player = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerController> ();
+			player = GameObject.FindGameObjectWithTag ("Player").GetComponent<HumanoidController> ();
 			GetEquipment (player.equipment);
 			GetInventory (player.inventory.items);
             GetStats ();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public enum Action
 {
@@ -12,7 +13,7 @@ public enum Action
 
 public class PlayerManager : MonoBehaviour
 {
-	PlayerController player;
+    CommonCharacterController player;
 	bool isPaused = false;
 
     GameObject actionsPanel;
@@ -23,11 +24,12 @@ public class PlayerManager : MonoBehaviour
 
     public GameObject spellButton;
 
-	void Start ()
+
+    void Start ()
 	{
         GameObject player_object = GameObject.FindGameObjectWithTag("Player");
 
-        player = player_object.GetComponent<PlayerController> ();
+        player = player_object.GetComponent<CommonCharacterController> ();
         player.OnDialog += OpenDialog;
 
         book = player_object.GetComponent<CastBook>();
@@ -39,14 +41,71 @@ public class PlayerManager : MonoBehaviour
         dialogVariants = dialogPanel.transform.Find("Answers").Find("Viewport").Find("Variants").gameObject;
     }
 
-	public void Attack ()
+
+    float cam_ray_length = 100.0f;
+    new Camera camera;
+    public void SetCamera(Camera cam)
+    {
+        camera = cam;
+    }
+
+    protected virtual void Update()
+    {
+        if (!EventSystem.current.IsPointerOverGameObject())
+        {
+            if (Input.GetMouseButton(0))
+            {
+                Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit, cam_ray_length))
+                    FindTarget(hit);
+            }
+
+            if (Input.GetButtonDown("Fire2"))
+            {
+                Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit, cam_ray_length))
+                {
+                    if (hit.transform.tag == "Enemy")
+                    {
+                        player.SetTarget(hit.transform.gameObject);
+                    }
+                    else if (hit.transform.tag == "NPC")
+                    {
+                        player.SetTarget(hit.transform.gameObject);
+                    }
+                }
+            }
+        }
+    }
+
+    void FindTarget(RaycastHit hit)
+    {
+        if (hit.transform.tag == "Enemy")
+        {
+            player.SetTarget(hit.transform.gameObject);
+        }
+        else if (hit.transform.tag == "NPC")
+        {
+            player.SetTarget(hit.transform.gameObject);
+        }
+        else if (hit.transform.tag == "Floor")
+        {
+            player.MoveToPoint(hit.point);
+        }
+    }
+
+    public void Attack ()
 	{
-		player.SetAction(PlayerController.Action.ATTACK);
+		player.SetAction(CommonCharacterController.Action.ATTACK);
 	}
 
 	public void Talk ()
 	{
-		player.SetAction(PlayerController.Action.TALK);
+		player.SetAction(CommonCharacterController.Action.TALK);
 	}
 
     public void OpenMagic()
@@ -98,6 +157,7 @@ public class PlayerManager : MonoBehaviour
         {
             Destroy(spell_button.gameObject);
         }
+        buttons.Clear();
     }
 
     public void CastMagic(GameObject btn)
@@ -119,7 +179,10 @@ public class PlayerManager : MonoBehaviour
 
     public GameObject variantButton;
 
-
+    public Dictionary<string, string> plotVariables = new Dictionary<string, string>()
+    {
+        { "AGGRESSIVE", "false" }
+    };
 
 
     class DialogState
@@ -134,7 +197,7 @@ public class PlayerManager : MonoBehaviour
             {
                 foreach (Frase next_frase in scene.brunches)
                 {
-                    if (!next_frase.condition.Check(manager.player.plotVariables))
+                    if (!next_frase.condition.Check(manager.plotVariables))
                         continue;
 
                     SetVariable(next_frase.result);
@@ -143,21 +206,21 @@ public class PlayerManager : MonoBehaviour
             }
             else
             {
-                if (manager.player.plotVariables["AGGRESSIVE"] == "true")
+                if (manager.plotVariables["AGGRESSIVE"] == "true")
                 {
                     Debug.Log(character.characterType + " is aggressive");
 
-                    manager.player.plotVariables["AGGRESSIVE"] = "false";
+                    manager.plotVariables["AGGRESSIVE"] = "false";
                     character.SetAction(CommonCharacterController.Action.ATTACK);
                     character.Target = manager.player;
                 }
 
-                if (manager.player.plotVariables.ContainsKey("STATE"))
+                if (manager.plotVariables.ContainsKey("STATE"))
                 {
-                    Debug.Log(character.characterType + " changes state:" + manager.player.plotVariables["STATE"]);
+                    Debug.Log(character.characterType + " changes state:" + manager.plotVariables["STATE"]);
 
-                    NPCManager.instance.SetClassState(character.characterType, manager.player.plotVariables["STATE"]);
-                    manager.player.plotVariables.Remove("STATE");
+                    NPCManager.instance.SetClassState(character.characterType, manager.plotVariables["STATE"]);
+                    manager.plotVariables.Remove("STATE");
                 }
 
                 manager.StopDialog();
@@ -184,7 +247,7 @@ public class PlayerManager : MonoBehaviour
             Vector2 pos = new Vector2(5.0f, -5.0f - 30.0f * i);
             foreach (Frase next_frase in brunches)
             {
-                if (!next_frase.condition.Check(manager.player.plotVariables))
+                if (!next_frase.condition.Check(manager.plotVariables))
                     continue;
 
                 if (next_frase.go_to_scene != null)
@@ -238,7 +301,7 @@ public class PlayerManager : MonoBehaviour
 
             try
             {
-                string value = manager.player.plotVariables[result.variable];
+                string value = manager.plotVariables[result.variable];
                 if (result.value[0] == '|')
                 {
                     value =  value + result.value;
@@ -248,11 +311,11 @@ public class PlayerManager : MonoBehaviour
                     value = result.value;
                 }
 
-                manager.player.plotVariables[result.variable] = value;
+                manager.plotVariables[result.variable] = value;
             }
             catch (KeyNotFoundException)
             {
-                manager.player.plotVariables.Add(result.variable, result.value);
+                manager.plotVariables.Add(result.variable, result.value);
             }
         }
     }

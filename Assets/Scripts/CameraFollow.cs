@@ -10,8 +10,9 @@ public class CameraFollow : MonoBehaviour
 
 	void Start ()
 	{
-		players = new List<GameObject> (GameObject.FindGameObjectsWithTag ("Player"));
-		setTarget(players[0]);
+		ResetTarget();
+		PlayerManager playerManager = FindObjectOfType<PlayerManager>();
+		playerManager.SetCamera(GetComponent<Camera>());
 	}
 
 	void FixedUpdate ()
@@ -22,20 +23,17 @@ public class CameraFollow : MonoBehaviour
 
     public void ResetTarget()
     {
-		players.Remove(target.gameObject);
-        target = null;
-		if (players.Count == 0)
-			players = new List<GameObject>(GameObject.FindGameObjectsWithTag("Player"));
+		players = new List<GameObject> (GameObject.FindGameObjectsWithTag ("Player"));
 		if (players.Count > 0)
 			setTarget(players[0]);
+        else
+			target = null;
     }
 
 	void setTarget(GameObject player)
     {
 		CommonCharacterController controller = player.GetComponent<CommonCharacterController>();
 		controller.OnDeath += ResetTarget;
-		PlayerManager playerManager = player.GetComponent<PlayerManager>();
-		playerManager.SetCamera(GetComponent<Camera>());
 
 		target = player.transform;
 		transform.position = new Vector3(target.position.x, target.position.y + 30.0f, target.position.z + 30.0f);

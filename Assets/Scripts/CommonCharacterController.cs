@@ -115,7 +115,6 @@ public class CommonCharacterController : MonoBehaviour
         right_hand_attack_timeout -= Time.deltaTime;
         left_hand_attack_timeout -= Time.deltaTime;
         cast_time -= Time.deltaTime;
-
         if (Target != null && action != Action.NONE)
         {
             if (Vector3.Distance(Target.gameObject.transform.position, transform.position) < ActionDistance)
@@ -182,6 +181,12 @@ public class CommonCharacterController : MonoBehaviour
         }
     }
 
+    public void MoveToPoint(Vector3 point)
+    {
+        action = Action.NONE;
+        Motor.MoveToPoint(point);
+    }
+
     public void SetTarget(GameObject obj)
     {
         targetObject = obj;
@@ -194,7 +199,10 @@ public class CommonCharacterController : MonoBehaviour
         action = Action.NONE;
     }
 
-    protected virtual void ReactOnEnemyDeath() { }
+    protected virtual void ReactOnEnemyDeath()
+    {
+        anim.SetTrigger("from agressive");
+    }
 
 
     protected float right_hand_attack_timeout = 0.0f;

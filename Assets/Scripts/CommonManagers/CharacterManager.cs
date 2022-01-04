@@ -19,16 +19,16 @@ public class CharacterManager : MonoBehaviour
 		}
 	}
 
-	static CharacterManager _instance;
-
-	void Awake ()
-	{
+    private void Awake()
+    {
 		_instance = this;
 		foreach (CharacterParametersSet cp in parameters)
 		{
 			_parameters [cp.character_name] = cp;
 		}
-	}
+    }
+
+    static CharacterManager _instance;
 
 	#endregion
 

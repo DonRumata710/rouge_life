@@ -34,8 +34,8 @@ public class NPCController : CommonCharacterController
     {
         if (Target == null && enemy != null)
         {
-            Target = enemy;
-            action = Action.ATTACK;
+            SetAction(Action.ATTACK);
+            SetTarget(enemy.gameObject);
             enemy.OnDeath += ResetTarget;
             enemy.OnDeath += ReactOnEnemyDeath;
             anim.SetBool("is_aggressive", true);
